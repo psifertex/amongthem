@@ -7,6 +7,8 @@
 #include <time.h>
 #include <locale.h>
 
+#include "xxtea.h"
+
 /* 
 
 	Build:
@@ -34,7 +36,7 @@ uint32_t crc = 0;
 
 #define TASKCOUNT 34
 
-char const *shortTaskNames[]={
+char const *shortTaskNames[] = {
 "Align Telescope",
 "Assemble Artifact",
 "Buy Beverage",
@@ -155,42 +157,14 @@ const char* flag = "FLAG{SurpriseTheImposterWas5up!}";
 const char* encrypted = "\xbb&\xce\xc7\xf4{\xdb\x9c\x015c\xffy\xb5\xbe\x96\x9d\xbb\xc1\xff\xac%\xc8\xd1\xa0\x1br\x98\xa8m\xce\xa8";
 char* encrypted ="bb26cec7f47bdb9c013563ff79b5be969dbbc1ffac25c8d1a01b7298a86dcea8";
 */
-char encrypted[32] = 
+
+/*char encrypted[] =
 {
 	0xbb, 0x26, 0xce, 0xc7, 0xf4, 0x7b, 0xdb, 0x9c, 0x01, 0x35, 0x63, 0xff, 0x79, 0xb5, 0xbe, 0x96,
 	0x9d, 0xbb, 0xc1, 0xff, 0xac, 0x25, 0xc8, 0xd1, 0xa0, 0x1b, 0x72, 0x98, 0xa8, 0x6d, 0xce, 0xa8
-};
-
-//From: https://en.wikipedia.org/wiki/XXTEA
-#define MX (z>>5^y<<2) + (y>>3^z<<4)^(sum^y) + (k[p&3^e]^z);
-long btea(long* v, long n, long* k) {
-	unsigned long z=v[n-1], y=v[0], sum=0, e, DELTA=0x9e3779b9;
-	long p, q ;
-	if (n > 1) {          /* Coding Part */
-		q = 6 + 52/n;
-		while (q-- > 0) {
-			sum += DELTA;
-			e = (sum >> 2) & 3;
-			for (p=0; p<n-1; p++) y = v[p+1], z = v[p] += MX;
-			y = v[0];
-			z = v[n-1] += MX;
-		}
-		return 0 ; 
-	} else if (n < -1) {  /* Decoding Part */
-		n = -n;
-		q = 6 + 52/n;
-		sum = q*DELTA ;
-		while (sum != 0) {
-			e = (sum >> 2) & 3;
-			for (p=n-1; p>0; p--) z = v[p-1], y = v[p] -= MX;
-			z = v[n-1];
-			y = v[0] -= MX;
-			sum -= DELTA;
-		}
-		return 0;
-	}
-	return 1;
-}
+};*/
+extern char encrypted[];
+extern size_t encrypted_len;
 
 void dead()
 {
@@ -232,12 +206,12 @@ int main(int argc, char** argv)
 	for(int x = 0; x < 10; x++){
 		strcpy(tasks[x].name, shortTaskNames[x]);
 		tasks[x].id = x;
-		tasks[x].time = rand() & 4 + 1;
+		tasks[x].time = (rand() & 4) + 1;
 	}
 
 
 setlocale(LC_ALL, NULL);
-printf("⠀⠀⠀⠀⠀⠀⠀⠀⡀⣄⣤⣦⣶⣤⣤⣤⣤⣤⣠⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀	                                                     	⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣤⣤⣤⣤⣤⣶⣦⣤⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀\n");
+/*printf("⠀⠀⠀⠀⠀⠀⠀⠀⡀⣄⣤⣦⣶⣤⣤⣤⣤⣤⣠⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀	                                                     	⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣤⣤⣤⣤⣤⣶⣦⣤⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀\n");
 printf("⠀⠀⠀⠀⠀⡀⣤⣷⣿⢿⠻⠛⠛⠛⠛⠙⠉⠛⡿⣿⣴⢀⠀⠀⠀⠀⠀⠀⠀⠀	                                                     	⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⣿⡿⠛⠉⠙⠛⠛⠛⠛⠻⢿⣿⣷⣤⡀⠀⠀⠀⠀⠀\n");
 printf("⠀⠀⠀⠀⡄⣿⣿⢻⠈⣀⣀⢀⠀⠀⠀⠀⠀⠀⠀⠋⣿⣼⠀⠀⠀⠀⠀⠀⠀⠀	                                                     	⠀⠀⠀⠀⠀⠀⠀⠀⣼⣿⠋⠀⠀⠀⠀⠀⠀⠀⢀⣀⣀⠈⢻⣿⣿⡄⠀⠀⠀⠀\n");
 printf("⠀⠀⠀⣄⣿⣿⣿⢿⠿⠿⠿⣿⣿⣿⣾⣶⣠⠀⠀⠀⡏⣿⣸⠀⠀⠀⠀⠀⠀⠀	                                                     	⠀⠀⠀⠀⠀⠀⠀⣸⣿⡏⠀⠀⠀⣠⣶⣾⣿⣿⣿⠿⠿⠿⢿⣿⣿⣿⣄⠀⠀⠀\n");
@@ -252,7 +226,7 @@ printf("⠀⠀⠀⡇⣿⢸⠀⠀⠁⡏⣿⣽⠀⡇⣿⣿⠀⠀⠀⠀⠀⣿⣿⠀
 printf("⠀⠀⠀⠇⣿⣸⠀⠀⠀⡆⣿⢹⠀⡇⣿⣿⠀⠀⠀⠀⠀⣿⣿⠀⠀⠀⠀⠀⠀⠀	                                                     	⠀⠀⠀⠀⠀⠀⠀⣿⣿⠀⠀⠀⠀⠀⣿⣿⡇⠀⢹⣿⡆⠀⠀⠀⣸⣿⠇⠀⠀⠀\n");
 printf("⠀⠀⠀⠀⠏⡿⣿⣿⣿⣿⠻⠈⠀⠁⣿⣿⣴⣠⣀⣄⣦⣿⢿⠀⠀⠀⠀⠀⠀⠀	                                                     	⠀⠀⠀⠀⠀⠀⠀⢿⣿⣦⣄⣀⣠⣴⣿⣿⠁⠀⠈⠻⣿⣿⣿⣿⡿⠏⠀⠀⠀⠀\n");
 printf("⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠁⠋⠿⠿⠿⠿⠻⠛⠈⠀⠀⠀⠀⠀⠀⠀	                                                     	⠀⠀⠀⠀⠀⠀⠀⠈⠛⠻⠿⠿⠿⠿⠋⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n");
-
+*/
 char* dummy = "80 char width terms are for space cadets.";
 
 /*
@@ -288,7 +262,7 @@ char* dummy = "80 char width terms are for space cadets.";
 
 
 	strcpy(tasklog, "3145926870");
-	printf("%d, %s", strlen(tasklog), &tasklog);
+	printf("%lu, %s", strlen(tasklog), tasklog);
 	printf("Good work! Your tasks are done, let's check on your crewmates to see if you saved the ship");
 	dots(5);
 	printf("\n");
@@ -301,7 +275,7 @@ char* dummy = "80 char width terms are for space cadets.";
 		long three = (tasklog[4] << 25) + (tasklog[6] << 17) + (tasklog[5] << 9) + (tasklog[7] << 0) + 2;
 		long four = (tasklog[6] << 25) + (tasklog[8] << 17) + (tasklog[7] << 9) + (tasklog[9] << 0) + 3;
 		long key[4] = {one, two, three, four};
-		printf("Key: \n%lu %lu %lu %lu\n", one, two, three, four);
+		printf("Key: \n%#lx, %#lx, %#lx, %#lx\n", one, two, three, four);
 		/*
 		for(int i = 0; i < strlen(encrypted) / 2; ++i)
 		{
@@ -309,10 +283,13 @@ char* dummy = "80 char width terms are for space cadets.";
 		}
 		*/
 
-		if (btea((long *)encrypted, -2, key))
+		//printf("N: %lu\n", sizeof(encrypted)/sizeof(long));
+		if (btea((long *)encrypted, -encrypted_len, key)) {
 			printf("%s\n", encrypted);
-		else
+		} else {
+			printf("%s\n", encrypted);
 			printf("Failed.");
+		}
 		//Decrypt the ecnrypted blob
 	} else {
 		dead();
