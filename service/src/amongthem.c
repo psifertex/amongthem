@@ -158,11 +158,6 @@ const char* encrypted = "\xbb&\xce\xc7\xf4{\xdb\x9c\x015c\xffy\xb5\xbe\x96\x9d\x
 char* encrypted ="bb26cec7f47bdb9c013563ff79b5be969dbbc1ffac25c8d1a01b7298a86dcea8";
 */
 
-/*char encrypted[] =
-{
-	0xbb, 0x26, 0xce, 0xc7, 0xf4, 0x7b, 0xdb, 0x9c, 0x01, 0x35, 0x63, 0xff, 0x79, 0xb5, 0xbe, 0x96,
-	0x9d, 0xbb, 0xc1, 0xff, 0xac, 0x25, 0xc8, 0xd1, 0xa0, 0x1b, 0x72, 0x98, 0xa8, 0x6d, 0xce, 0xa8
-};*/
 extern char encrypted[];
 extern size_t encrypted_len;
 
@@ -211,7 +206,7 @@ int main(int argc, char** argv)
 
 
 setlocale(LC_ALL, NULL);
-/*printf("⠀⠀⠀⠀⠀⠀⠀⠀⡀⣄⣤⣦⣶⣤⣤⣤⣤⣤⣠⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀	                                                     	⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣤⣤⣤⣤⣤⣶⣦⣤⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀\n");
+printf("⠀⠀⠀⠀⠀⠀⠀⠀⡀⣄⣤⣦⣶⣤⣤⣤⣤⣤⣠⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀	                                                     	⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣤⣤⣤⣤⣤⣶⣦⣤⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀\n");
 printf("⠀⠀⠀⠀⠀⡀⣤⣷⣿⢿⠻⠛⠛⠛⠛⠙⠉⠛⡿⣿⣴⢀⠀⠀⠀⠀⠀⠀⠀⠀	                                                     	⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⣿⡿⠛⠉⠙⠛⠛⠛⠛⠻⢿⣿⣷⣤⡀⠀⠀⠀⠀⠀\n");
 printf("⠀⠀⠀⠀⡄⣿⣿⢻⠈⣀⣀⢀⠀⠀⠀⠀⠀⠀⠀⠋⣿⣼⠀⠀⠀⠀⠀⠀⠀⠀	                                                     	⠀⠀⠀⠀⠀⠀⠀⠀⣼⣿⠋⠀⠀⠀⠀⠀⠀⠀⢀⣀⣀⠈⢻⣿⣿⡄⠀⠀⠀⠀\n");
 printf("⠀⠀⠀⣄⣿⣿⣿⢿⠿⠿⠿⣿⣿⣿⣾⣶⣠⠀⠀⠀⡏⣿⣸⠀⠀⠀⠀⠀⠀⠀	                                                     	⠀⠀⠀⠀⠀⠀⠀⣸⣿⡏⠀⠀⠀⣠⣶⣾⣿⣿⣿⠿⠿⠿⢿⣿⣿⣿⣄⠀⠀⠀\n");
@@ -226,7 +221,7 @@ printf("⠀⠀⠀⡇⣿⢸⠀⠀⠁⡏⣿⣽⠀⡇⣿⣿⠀⠀⠀⠀⠀⣿⣿⠀
 printf("⠀⠀⠀⠇⣿⣸⠀⠀⠀⡆⣿⢹⠀⡇⣿⣿⠀⠀⠀⠀⠀⣿⣿⠀⠀⠀⠀⠀⠀⠀	                                                     	⠀⠀⠀⠀⠀⠀⠀⣿⣿⠀⠀⠀⠀⠀⣿⣿⡇⠀⢹⣿⡆⠀⠀⠀⣸⣿⠇⠀⠀⠀\n");
 printf("⠀⠀⠀⠀⠏⡿⣿⣿⣿⣿⠻⠈⠀⠁⣿⣿⣴⣠⣀⣄⣦⣿⢿⠀⠀⠀⠀⠀⠀⠀	                                                     	⠀⠀⠀⠀⠀⠀⠀⢿⣿⣦⣄⣀⣠⣴⣿⣿⠁⠀⠈⠻⣿⣿⣿⣿⡿⠏⠀⠀⠀⠀\n");
 printf("⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠁⠋⠿⠿⠿⠿⠻⠛⠈⠀⠀⠀⠀⠀⠀⠀	                                                     	⠀⠀⠀⠀⠀⠀⠀⠈⠛⠻⠿⠿⠿⠿⠋⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n");
-*/
+
 char* dummy = "80 char width terms are for space cadets.";
 
 /*
@@ -283,14 +278,12 @@ char* dummy = "80 char width terms are for space cadets.";
 		}
 		*/
 
-		//printf("N: %lu\n", sizeof(encrypted)/sizeof(long));
-		if (btea((long *)encrypted, -encrypted_len, key)) {
+		//Decrypt the ecnrypted blob
+		if (!btea((long *)encrypted, -encrypted_len, key)) {
 			printf("%s\n", encrypted);
 		} else {
-			printf("%s\n", encrypted);
 			printf("Failed.");
 		}
-		//Decrypt the ecnrypted blob
 	} else {
 		dead();
 	}
