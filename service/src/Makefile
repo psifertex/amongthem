@@ -6,6 +6,6 @@ amongthem: amongthem.c xxtea.c payload.c
 	strip amongthem
 
 
-payload.c: encryptor.c
+payload.c: encryptor.c xxtea.c
 	gcc -o encryptor encryptor.c xxtea.c  -Wall
 	./encryptor > payload.c
