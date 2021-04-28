@@ -9,16 +9,6 @@
 
 #include "xxtea.h"
 
-/* 
-
-	Build:
-	gcc -o amongthem -static amongthem.c && strip amongthem
-
-	#Harden
-	gcc -o amongthem -D_FORTIFY_SOURCE=2 -O1 -no-pie -static -fno-stack-protector amongthem.c && strip amongthem
-
- */
-
 struct Task {
 	uint8_t id;
 	char name[30];
@@ -27,7 +17,6 @@ struct Task {
 
 struct Task tasks[10];
 
-//char* checksum = "\xff\xff\xff\xff";
 int32_t checksum = 329936096;
 
 char tasklog[20]; 
@@ -139,24 +128,7 @@ void showTasks()
 	printf("\n");
 }
 
-/*
-
-3
-1
-4
-5
-9
-2
-6
-8
-7
-0
-
-const char* correct = "3145926870";
-const char* flag = "FLAG{SurpriseTheImposterWas5up!}";
-const char* encrypted = "\xbb&\xce\xc7\xf4{\xdb\x9c\x015c\xffy\xb5\xbe\x96\x9d\xbb\xc1\xff\xac%\xc8\xd1\xa0\x1br\x98\xa8m\xce\xa8";
-char* encrypted ="bb26cec7f47bdb9c013563ff79b5be969dbbc1ffac25c8d1a01b7298a86dcea8";
-*/
+//const char* correct = "3145926870";
 
 extern char encrypted[];
 extern size_t encrypted_len;
@@ -189,12 +161,12 @@ int main(int argc, char** argv)
 	char tid;
 	setvbuf(stdout, NULL, _IONBF, 0);
 	srand(time(0));
-/*
+
 	if (getenv("DEBUG") == NULL)
 	{
 		alarm(30);
 	}
-*/
+
 
 	//Generating tasks
 	shuffleTasks();
@@ -224,7 +196,6 @@ printf("⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠁⠋⠿⠿⠿⠿⠻⠛⠈⠀
 
 char* dummy = "80 char width terms are for space cadets.";
 
-/*
 	while (strlen(tasklog) < 10)
 	{
 		//Still tasks remaining
@@ -252,33 +223,24 @@ char* dummy = "80 char width terms are for space cadets.";
 		}
 
 	}
-	*/
 
-
-
-	strcpy(tasklog, "3145926870");
-	printf("%lu, %s", strlen(tasklog), tasklog);
+	//Uncomment to debug
+	//strcpy(tasklog, "3145926870");
+	//printf("%lu, %s", strlen(tasklog), tasklog);
 	printf("Good work! Your tasks are done, let's check on your crewmates to see if you saved the ship");
 	dots(5);
 	printf("\n");
 	crc32(&tasklog, strlen(tasklog), &crc);
 	if (crc == checksum)
 	{
-		printf("Congratulations! You managed to save your ship from destruction.");
+		printf("\nCongratulations! You managed to save your ship from destruction.\n\n");
 		long one = (tasklog[0] << 25) + (tasklog[2] << 17) + (tasklog[1] << 9) + (tasklog[3] << 0) + 0;
 		long two = (tasklog[2] << 25) + (tasklog[4] << 17) + (tasklog[3] << 9) + (tasklog[5] << 0) + 1;
 		long three = (tasklog[4] << 25) + (tasklog[6] << 17) + (tasklog[5] << 9) + (tasklog[7] << 0) + 2;
 		long four = (tasklog[6] << 25) + (tasklog[8] << 17) + (tasklog[7] << 9) + (tasklog[9] << 0) + 3;
 		long key[4] = {one, two, three, four};
-		printf("Key: \n%#lx, %#lx, %#lx, %#lx\n", one, two, three, four);
-		/*
-		for(int i = 0; i < strlen(encrypted) / 2; ++i)
-		{
-			sscanf(&encb64[i], "%02X", (uint*) &encrypted[2 * i]);
-		}
-		*/
+		//printf("Key: \n%#lx, %#lx, %#lx, %#lx\n", one, two, three, four);
 
-		//Decrypt the ecnrypted blob
 		if (!btea((long *)encrypted, -encrypted_len, key)) {
 			printf("%s\n", encrypted);
 		} else {

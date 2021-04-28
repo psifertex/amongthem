@@ -6,7 +6,7 @@
 
 #define NUM_BLOCKS 4
 #define PLAINTEXT_LEN (sizeof(long)*NUM_BLOCKS)
-unsigned char plaintext[PLAINTEXT_LEN] = {"HELLO JORDAN!"}; 
+unsigned char plaintext[PLAINTEXT_LEN] = {"FLAG{SurpriseTheImposterWas5up!}"}; 
 
 long key[4] = { 0x66686235, 0x68726a33, 0x726c643a, 0x6c6e7033 };
 
