@@ -1,0 +1,9 @@
+.vscode/
+service/src/amongthem
+service/src/xxtea
+service/src/encryptor
+service/src/payload.c
+.DS_Store
+._.DS_Store
+**/.DS_Store
+**/._.DS_Store
