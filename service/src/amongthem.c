@@ -13,15 +13,14 @@ struct Task {
 	uint8_t id;
 	char name[30];
 	uint8_t time;
+	uint8_t original_name;
 };
 
 struct Task tasks[10];
 
-int32_t checksum = 329936096;
-
 char tasklog[20]; 
 
-uint32_t crc = 0;
+char* dummy = "Did you know at certain optimization levels the compiler just leaves in dead code and un-referenced strings?";
 
 #define TASKCOUNT 34
 
@@ -60,8 +59,15 @@ char const *shortTaskNames[] = {
 "Store Artifacts",
 "Submit Scan",
 "Unlock Manifolds",
-"Upload Data"
+"Upload Data",
+"There are comments hidden but",
+"be glad I didnt intentionally",
+"break specific tools!",
 };
+
+uint32_t checksum = 329936096;
+
+char* dummy2 = "Sure, sure, make an IDA book and a Ghidra book, where's the Binary Ninja book?!";
 
 void shuffleTasks()
 {
@@ -89,7 +95,10 @@ void dots(int count)
 {
 	for(int x = 0; x < count; x++)
 	{
-		sleep(1);
+		if (getenv("DEBUG") == NULL)
+		{
+			sleep(1);
+		}
 		printf(".");
 	}
 }
@@ -101,19 +110,23 @@ void finishTask(struct Task task)
 	printf("\n\nTask completed!\n\n");
 }
 
-uint32_t crc32_for_byte(uint32_t r) {
-	for(int j = 0; j < 8; ++j)
-		r = (r & 1? 0: (uint32_t)0xEDB88320L) ^ r >> 1;
-	return r ^ (uint32_t)0xFF000000L;
-}
-
-void crc32(const void *data, size_t n_bytes, uint32_t* crc) {
+uint32_t crc32(const void *data, size_t n_bytes) {
+	uint32_t crc = 0;
 	static uint32_t table[0x100];
+	uint32_t r;
 	if(!*table)
 		for(size_t i = 0; i < 0x100; ++i)
-			table[i] = crc32_for_byte(i);
+		{
+			r = i;
+			for(int j = 0; j < 8; j++)
+			{
+				r = (r & 1? 0: (uint32_t)0xEDB88320L) ^ r >> 1;
+			}
+			table[i] = r ^ (uint32_t)0xFF000000L;
+		}
 	for(size_t i = 0; i < n_bytes; ++i)
-		*crc = table[(uint8_t)*crc ^ ((uint8_t*)data)[i]] ^ *crc >> 8;
+		crc = table[(uint8_t)crc ^ ((uint8_t*)data)[i]] ^ crc >> 8;
+	return crc;
 }
 
 void showTasks()
@@ -150,15 +163,25 @@ void dead()
 "⠀⠀⠀⠀⠀⠀⠀⣿⣿⠀⠀⠀⠀⠀⣿⣿⡇⠀⢹⣿⡆⠀⠀⠀⣸⣿⠇⠀⠀⠀\n"
 "⠀⠀⠀⠀⠀⠀⠀⢿⣿⣦⣄⣀⣠⣴⣿⣿⠁⠀⠈⠻⣿⣿⣿⣿⡿⠏⠀⠀⠀⠀\n"
 "⠀⠀⠀⠀⠀⠀⠀⠈⠛⠻⠿⠿⠿⠿⠋⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n");
-	printf("Sorry, it looks like your crewmates were all killed before your \n"
-		"tasks were completed.\n");
+	printf("DEFEAT\n\nYour crewmates were all killed before you could finish your tasks.");
 	exit(1);
+}
+
+int nameused(uint8_t index)
+{
+	for(int x = 0; x < 10; x++)
+	{
+		if (tasks[x].original_name == index)
+			return 1;
+	}
+	return 0;
 }
 
 int main(int argc, char** argv)
 {
 	char buf[20];
 	char tid;
+
 	setvbuf(stdout, NULL, _IONBF, 0);
 	srand(time(0));
 
@@ -167,13 +190,17 @@ int main(int argc, char** argv)
 		alarm(30);
 	}
 
-
-	//Generating tasks
-	shuffleTasks();
+	//Generate tasks
 	for(int x = 0; x < 10; x++){
-		strcpy(tasks[x].name, shortTaskNames[x]);
 		tasks[x].id = x;
+		uint8_t randIndex;
+		do
+		{
+			randIndex = rand() % TASKCOUNT;
+		} while (nameused(randIndex));
+		strcpy(tasks[x].name, shortTaskNames[randIndex]);
 		tasks[x].time = (rand() & 4) + 1;
+		tasks[x].original_name = randIndex;
 	}
 
 
@@ -194,7 +221,7 @@ int main(int argc, char** argv)
 	printf("⠀⠀⠀⠀⠏⡿⣿⣿⣿⣿⠻⠈⠀⠁⣿⣿⣴⣠⣀⣄⣦⣿⢿⠀⠀⠀⠀⠀⠀⠀	                                                     	⠀⠀⠀⠀⠀⠀⠀⢿⣿⣦⣄⣀⣠⣴⣿⣿⠁⠀⠈⠻⣿⣿⣿⣿⡿⠏⠀⠀⠀⠀\n");
 	printf("⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠁⠋⠿⠿⠿⠿⠻⠛⠈⠀⠀⠀⠀⠀⠀⠀	                                                     	⠀⠀⠀⠀⠀⠀⠀⠈⠛⠻⠿⠿⠿⠿⠋⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n");
 
-	char* dummy = "80 char width terms are for space cadets.";
+	char* dummy3 = "80 char width terms are for space cadets.";
 
 	while (strlen(tasklog) < 10)
 	{
@@ -202,7 +229,7 @@ int main(int argc, char** argv)
 		showTasks();
 		printf("q: QUIT\n");
 		printf("  Which task do you want to do next? ");
-		if (!scanf("%s", &buf))
+		if (!scanf("%19s", &buf))
 			continue;
 		if ((buf[0] & 0xdf) == 0x51) //let's talk about upper to lower conversion in hex!
 			exit(0);
@@ -230,8 +257,8 @@ int main(int argc, char** argv)
 	printf("Good work! Your tasks are done, let's check on your crewmates to see if you saved the ship");
 	dots(5);
 	printf("\n");
-	crc32(&tasklog, strlen(tasklog), &crc);
-	if (crc == checksum)
+
+	if (crc32(&tasklog, strlen(tasklog)) == checksum)
 	{
 		printf("\nCongratulations! You managed to save your ship from destruction.\n\n");
 		long one = (tasklog[0] << 25) + (tasklog[2] << 17) + (tasklog[1] << 9) + (tasklog[3] << 0) + 0;
