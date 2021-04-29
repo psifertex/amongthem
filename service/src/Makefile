@@ -3,7 +3,7 @@ release: amongthem.c xxtea.c payload.c
 	strip amongthem
 
 debug: amongthem.c xxtea.c payload.c
-	gcc -o amongthem -Wall amongthem.c payload.c xxtea.c 
+	gcc -o amongthem -g -Wall amongthem.c payload.c xxtea.c 
 
 payload.c: encryptor.c xxtea.c
 	gcc -o encryptor encryptor.c xxtea.c  -Wall

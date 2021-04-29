@@ -66,6 +66,8 @@ char const *shortTaskNames[] = {
 };
 
 uint32_t checksum = 329936096;
+uint32_t checksum_left = 3059920253;
+uint32_t checksum_right = 1411751734;
 
 char* dummy2 = "Sure, sure, make an IDA book and a Ghidra book, where's the Binary Ninja book?!";
 
@@ -258,7 +260,9 @@ int main(int argc, char** argv)
 	dots(5);
 	printf("\n");
 
-	if (crc32(&tasklog, strlen(tasklog)) == checksum)
+	if ((crc32(&tasklog, 10) == checksum) && \
+		(crc32(&tasklog, 5) == checksum_left) && \
+		(crc32(&tasklog[5], 5) == checksum_right))
 	{
 		printf("\nCongratulations! You managed to save your ship from destruction.\n\n");
 		long one = (tasklog[0] << 25) + (tasklog[2] << 17) + (tasklog[1] << 9) + (tasklog[3] << 0) + 0;
