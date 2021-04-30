@@ -1,5 +1,4 @@
 .vscode/
-service/src/amongthem
 service/src/xxtea
 service/src/encryptor
 service/src/payload.c

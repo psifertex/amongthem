@@ -189,7 +189,7 @@ int main(int argc, char** argv)
 
 	if (getenv("DEBUG") == NULL)
 	{
-		alarm(30);
+		alarm(120);
 	}
 
 	//Generate tasks
