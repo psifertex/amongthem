@@ -3,14 +3,13 @@ run echo "service Dockerfile apt" && \
     apt-get -qq update && apt-get install -qq xinetd
 
 
-copy amongthem /
+copy src/amongthem /
 run chmod 755 /amongthem
 
-run touch /flag && chmod 644 /flag && echo "FLAG{Green:RedSoSus}" > /flag
 copy service.conf /service.conf
 copy wrapper /wrapper
 copy banner_fail /
 
-expose 31337
+expose 3535
 
 cmd ["/usr/sbin/xinetd", "-filelog", "-", "-dontfork", "-f", "/service.conf"]
